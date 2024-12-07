@@ -9,6 +9,7 @@ from meal_max.models.battle_model import BattleModel
 from meal_max.models.kitchen_model import Meals
 from meal_max.models.mongo_session_model import login_user, logout_user
 from meal_max.models.user_model import Users
+from global import BASE_URL, REDIRECT_URI, SPOTIFY_AUTH_URL, SPOTIFY_TOKEN_URL
 
 # Load environment variables from .env file
 load_dotenv()
@@ -47,126 +48,87 @@ def create_app(config_class=ProductionConfig):
     #
     ##########################################################
 
-    @app.route('/api/create-user', methods=['POST'])
-    def create_user() -> Response:
-        """
-        Route to create a new user.
-
-        Expected JSON Input:
-            - username (str): The username for the new user.
-            - password (str): The password for the new user.
-
-        Returns:
-            JSON response indicating the success of user creation.
-        Raises:
-            400 error if input validation fails.
-            500 error if there is an issue adding the user to the database.
-        """
-        app.logger.info('Creating new user')
-        try:
-            # Get the JSON data from the request
-            data = request.get_json()
-
-            # Extract and validate required fields
-            username = data.get('username')
-            password = data.get('password')
-
-            if not username or not password:
-                return make_response(jsonify({'error': 'Invalid input, both username and password are required'}), 400)
-
-            # Call the User function to add the user to the database
-            app.logger.info('Adding user: %s', username)
-            Users.create_user(username, password)
-
-            app.logger.info("User added: %s", username)
-            return make_response(jsonify({'status': 'user added', 'username': username}), 201)
-        except Exception as e:
-            app.logger.error("Failed to add user: %s", str(e))
-            return make_response(jsonify({'error': str(e)}), 500)
-
-    @app.route('/api/delete-user', methods=['DELETE'])
-    def delete_user() -> Response:
-        """
-        Route to delete a user.
-
-        Expected JSON Input:
-            - username (str): The username of the user to be deleted.
-
-        Returns:
-            JSON response indicating the success of user deletion.
-        Raises:
-            400 error if input validation fails.
-            500 error if there is an issue deleting the user from the database.
-        """
-        app.logger.info('Deleting user')
-        try:
-            # Get the JSON data from the request
-            data = request.get_json()
-
-            # Extract and validate required fields
-            username = data.get('username')
-
-            if not username:
-                return make_response(jsonify({'error': 'Invalid input, username is required'}), 400)
-
-            # Call the User function to delete the user from the database
-            app.logger.info('Deleting user: %s', username)
-            Users.delete_user(username)
-
-            app.logger.info("User deleted: %s", username)
-            return make_response(jsonify({'status': 'user deleted', 'username': username}), 200)
-        except Exception as e:
-            app.logger.error("Failed to delete user: %s", str(e))
-            return make_response(jsonify({'error': str(e)}), 500)
-
-    # @app.route('/api/login', methods=['POST'])
-    # def login():
+    # @app.route('/api/create-user', methods=['POST'])
+    # def create_user() -> Response:
     #     """
-    #     Route to log in a user and load their combatants.
+    #     Route to create a new user.
 
     #     Expected JSON Input:
-    #         - username (str): The username of the user.
-    #         - password (str): The user's password.
+    #         - username (str): The username for the new user.
+    #         - password (str): The password for the new user.
 
     #     Returns:
-    #         JSON response indicating the success of the login.
-
+    #         JSON response indicating the success of user creation.
     #     Raises:
     #         400 error if input validation fails.
-    #         401 error if authentication fails (invalid username or password).
-    #         500 error for any unexpected server-side issues.
+    #         500 error if there is an issue adding the user to the database.
     #     """
-    #     data = request.get_json()
-    #     if not data or 'username' not in data or 'password' not in data:
-    #         app.logger.error("Invalid request payload for login.")
-    #         raise BadRequest("Invalid request payload. 'username' and 'password' are required.")
-
-    #     username = data['username']
-    #     password = data['password']
-
+    #     app.logger.info('Creating new user')
     #     try:
-    #         # Validate user credentials
-    #         if not Users.check_password(username, password):
-    #             app.logger.warning("Login failed for username: %s", username)
-    #             raise Unauthorized("Invalid username or password.")
+    #         # Get the JSON data from the request
+    #         data = request.get_json()
 
-    #         # Get user ID
-    #         user_id = Users.get_id_by_username(username)
+    #         # Extract and validate required fields
+    #         username = data.get('username')
+    #         password = data.get('password')
 
-    #         # Load user's combatants into the battle model
-    #         login_user(user_id, battle_model)
+    #         if not username or not password:
+    #             return make_response(jsonify({'error': 'Invalid input, both username and password are required'}), 400)
 
-    #         app.logger.info("User %s logged in successfully.", username)
-    #         return jsonify({"message": f"User {username} logged in successfully."}), 200
+    #         # Call the User function to add the user to the database
+    #         app.logger.info('Adding user: %s', username)
+    #         Users.create_user(username, password)
 
-    #     except Unauthorized as e:
-    #         return jsonify({"error": str(e)}), 401
+    #         app.logger.info("User added: %s", username)
+    #         return make_response(jsonify({'status': 'user added', 'username': username}), 201)
     #     except Exception as e:
-    #         app.logger.error("Error during login for username %s: %s", username, str(e))
-    #         return jsonify({"error": "An unexpected error occurred."}), 500
+    #         app.logger.error("Failed to add user: %s", str(e))
+    #         return make_response(jsonify({'error': str(e)}), 500)
+
+    # @app.route('/api/delete-user', methods=['DELETE'])
+    # def delete_user() -> Response:
+    #     """
+    #     Route to delete a user.
+
+    #     Expected JSON Input:
+    #         - username (str): The username of the user to be deleted.
+
+    #     Returns:
+    #         JSON response indicating the success of user deletion.
+    #     Raises:
+    #         400 error if input validation fails.
+    #         500 error if there is an issue deleting the user from the database.
+    #     """
+    #     app.logger.info('Deleting user')
+    #     try:
+    #         # Get the JSON data from the request
+    #         data = request.get_json()
+
+    #         # Extract and validate required fields
+    #         username = data.get('username')
+
+    #         if not username:
+    #             return make_response(jsonify({'error': 'Invalid input, username is required'}), 400)
+
+    #         # Call the User function to delete the user from the database
+    #         app.logger.info('Deleting user: %s', username)
+    #         Users.delete_user(username)
+
+    #         app.logger.info("User deleted: %s", username)
+    #         return make_response(jsonify({'status': 'user deleted', 'username': username}), 200)
+    #     except Exception as e:
+    #         app.logger.error("Failed to delete user: %s", str(e))
+    #         return make_response(jsonify({'error': str(e)}), 500)
+
 
     @app.route('api/login', methods=['POST'])
     def login():
+        """
+        Route to login a user by redirecting the user to Spotify's authentication page..
+
+        Returns:
+            A redirect response to Spotify's authentication page.
+        """
         auth_query_params = {
         'client_id': CLIENT_ID,
         'response_type': 'code',
@@ -176,45 +138,104 @@ def create_app(config_class=ProductionConfig):
     url = f"{SPOTIFY_AUTH_URL}/?{urlencode(auth_query_params)}"
     return redirect(url)
 
-
-    @app.route('/api/logout', methods=['POST'])
-    def logout():
+    @app.route('/callback', methods=['POST'])
+    def callback():
         """
-        Route to log out a user and save their combatants to MongoDB.
+        Handles the redirect from Spotify after authentication.
 
-        Expected JSON Input:
-            - username (str): The username of the user.
 
         Returns:
-            JSON response indicating the success of the logout.
-
-        Raises:
-            400 error if input validation fails or user is not found in MongoDB.
-            500 error for any unexpected server-side issues.
+            A redirect response to the `/user-profile` route.
         """
-        data = request.get_json()
-        if not data or 'username' not in data:
-            app.logger.error("Invalid request payload for logout.")
-            raise BadRequest("Invalid request payload. 'username' is required.")
+        code = request.args.get('code')
+        token_data = {
+            'grant_type': 'authorization_code',
+            'code': code,
+            'redirect_uri': REDIRECT_URI,
+            'client_id': CLIENT_ID,
+            'client_secret': CLIENT_SECRET,
+        }
+        response = requests.post(SPOTIFY_TOKEN_URL, data=token_data)
+        response_data = response.json()
+        session['access_token'] = response_data.get('access_token')
+        return redirect('/user-profile')
 
-        username = data['username']
+    @app.route('/user-profile', methods=['POST'])
+        def user_profile():
+        """
+        Fetches and displays the authenticated user's Spotify profile.
 
-        try:
-            # Get user ID
-            user_id = Users.get_id_by_username(username)
+        Makes a GET request to Spotify's `/me` endpoint using the access token.
 
-            # Save user's combatants and clear the battle model
-            logout_user(user_id, battle_model)
+        Returns:
+            JSON response containing the user's Spotify profile data.
+        """
+        access_token = session.get('access_token')
+        if not access_token:
+        return redirect('/login')
+    
+        headers = {'Authorization': f'Bearer {access_token}'}
+        response = requests.get(f"{BASE_URL}/me", headers=headers)
+        return jsonify(response.json())
 
-            app.logger.info("User %s logged out successfully.", username)
-            return jsonify({"message": f"User {username} logged out successfully."}), 200
+    
+    @app.route('/playlists', methods=['POST'])
+        def playlists():
+        """
+        Fetches and displays the authenticated user's playlists.
 
-        except ValueError as e:
-            app.logger.warning("Logout failed for username %s: %s", username, str(e))
-            return jsonify({"error": str(e)}), 400
-        except Exception as e:
-            app.logger.error("Error during logout for username %s: %s", username, str(e))
-            return jsonify({"error": "An unexpected error occurred."}), 500
+        Makes a GET request to Spotify's `/me/playlists` endpoint using the access token.
+
+        Returns:
+            JSON response containing the user's playlist data.
+        """
+        access_token = session.get('access_token')
+        if not access_token:
+            return redirect('/login')
+
+        headers = {'Authorization': f'Bearer {access_token}'}
+        response = requests.get(f"{SPOTIFY_API_BASE_URL}/me/playlists", headers=headers)
+        return jsonify(response.json())
+
+
+    # @app.route('/api/logout', methods=['POST'])
+    # def logout():
+    #     """
+    #     Route to log out a user and save their combatants to MongoDB.
+
+    #     Expected JSON Input:
+    #         - username (str): The username of the user.
+
+    #     Returns:
+    #         JSON response indicating the success of the logout.
+
+    #     Raises:
+    #         400 error if input validation fails or user is not found in MongoDB.
+    #         500 error for any unexpected server-side issues.
+    #     """
+    #     data = request.get_json()
+    #     if not data or 'username' not in data:
+    #         app.logger.error("Invalid request payload for logout.")
+    #         raise BadRequest("Invalid request payload. 'username' is required.")
+
+    #     username = data['username']
+
+    #     try:
+    #         # Get user ID
+    #         user_id = Users.get_id_by_username(username)
+
+    #         # Save user's combatants and clear the battle model
+    #         logout_user(user_id, battle_model)
+
+    #         app.logger.info("User %s logged out successfully.", username)
+    #         return jsonify({"message": f"User {username} logged out successfully."}), 200
+
+    #     except ValueError as e:
+    #         app.logger.warning("Logout failed for username %s: %s", username, str(e))
+    #         return jsonify({"error": str(e)}), 400
+    #     except Exception as e:
+    #         app.logger.error("Error during logout for username %s: %s", username, str(e))
+    #         return jsonify({"error": "An unexpected error occurred."}), 500
 
 
     ##########################################################
@@ -502,4 +523,4 @@ def create_app(config_class=ProductionConfig):
 
 if __name__ == '__main__':
     app = create_app()
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=3000)
