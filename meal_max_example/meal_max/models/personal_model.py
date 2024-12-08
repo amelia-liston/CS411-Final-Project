@@ -6,7 +6,7 @@ import requests
 
 
 logger = logging.getLogger(__name__)
-configure_logger(logger)
+#configure_logger(logger)
 
 
 TTL = os.getenv("TTL", 60)  # Default TTL is 60 seconds
@@ -51,13 +51,17 @@ class PersonalModel:
         """
         # Validate the inputs
         if type not in ["artists", "tracks"]:
-            raise ValueError("Invalid item type: %s", type)
+            logger.info("Invalid type: %s", type)
+            raise ValueError(f"Invalid item type: {type}")
         if time_range not in ["long_term", "medium_term", "short_term"]:
-            raise ValueError("Invalid time range: %s", time_range)
+            logger.info("Invalid time range: %s", time_range)
+            raise ValueError(f"Invalid time range: {time_range}")
         if limit <1 or limit >50:
-            raise ValueError("Invalid item limit: %s", limit)
+            logger.info("Invalid limit: %s", limit)
+            raise ValueError(f"Invalid item limit: {limit}")
         if offset <0:
-            raise ValueError("Invalid offset: %s", offset)
+            logger.info("Invalid offset: %s", offset)
+            raise ValueError(f"Invalid offset: {offset}")
         
         # Construct URL
         url = f"{self.BASE_URL}/me/top/{type}"
