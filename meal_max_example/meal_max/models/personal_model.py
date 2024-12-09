@@ -108,8 +108,9 @@ class PersonalModel:
             RequestException: If the Spotify API request fails.
         """
         # Validate inputs
-        if not (1 <= limit <= 50):
-            raise ValueError("Limit must be between 1 and 50.")
+        if limit <1 or limit >50:
+            logger.info("Invalid limit: %s", limit)
+            raise ValueError(f"Invalid item limit: {limit}")
 
         # Prepare API request
         headers = self.get_headers()
@@ -126,9 +127,15 @@ class PersonalModel:
         try:
             response = requests.get(url, headers=headers, params=params)
             response.raise_for_status()
-            return response.json().get('artists', {})
-        except requests.RequestException as e:
-            raise requests.RequestException(f"Failed to fetch followed artists: {str(e)}")
+            return response.json()
+        
+        except requests.exceptions.Timeout:
+            logger.error("Request to Spotify timed out.")
+            raise RuntimeError("Request to Spotify timed out.")
+    
+        except requests.exceptions.RequestException as e:
+            logger.error("Request to Spotify failed: %s", e)
+            raise RuntimeError("Request to Spotify failed: %s" % e)
         
     def get_saved_albums(self, limit: int = 20, offset: int = 0, market: str = None) -> dict:
         """
@@ -148,9 +155,11 @@ class PersonalModel:
         """
         # Validate the inputs
         if limit <1 or limit >50:
-            raise ValueError("Invalid item limit: %s", limit)
-        if offset < 0:
-            raise ValueError("Invalid offset: %s", offset)
+            logger.info("Invalid limit: %s", limit)
+            raise ValueError(f"Invalid item limit: {limit}")
+        if offset <0:
+            logger.info("Invalid offset: %s", offset)
+            raise ValueError(f"Invalid offset: {offset}")
 
         # Construct URL
         url = f"{self.BASE_URL}/me/albums"
