@@ -5,7 +5,7 @@
 
 ## Routes:
 
-Route: `/login`
+### Route: `/login`
 - Request Type: POST
 - Purpose: Redirects the user to Spotify's authentication page to initiate the OAuth login process.
 - Request Body: No request body is required for this endpoint
@@ -16,7 +16,7 @@ Route: `/login`
   -   Example Request: No request body needed.
   -   Example Response: A redirect response pointing to Spotify's authentication page
  
-Route: `/callback`
+### Route: `/callback`
 - Request Type: POST
 - Purpose: Handles the redirect from Spotify after user authentication and exchanges the authorization code for an access token.
 - Request Body:
@@ -29,7 +29,7 @@ Route: `/callback`
   -   Example Request: This route does not require a direct request body. It relies on a query parameter provided by Spotify during the redirect.
   -   Example Response: A redirect response to `/user-profile`
 
- Route: `/user-profile`
+ ### Route: `/user-profile`
 - Request Type: POST
 - Purpose: Fetches and displays the authenticated user's Spotify profile by making a GET request to Spotify's `/me` endpoint using the stored access token.
 - Request Body:
@@ -73,6 +73,69 @@ Route: `/callback`
 ```
   - Or an error response if the access token is missing:
  ```
+HTTP/1.1 302 Found
+Location: /login
+```
+
+### Route: `/playlists`
+- Request Type: POST
+- Purpose: Fetches and displays the authenticated user's playlists by making a GET request to Spotify's `/me/playlists` endpoint using the stored access token.
+- Request Body:
+  - No request body is required for this endpoint.
+- Response Format: JSON response containing the user's playlist data.
+  -   Success Response Example:
+      - Code: 200
+      - Content: Redirects to `/user-profile`.
+```
+{
+    "items": [
+        {
+            "id": "37i9dQZF1DXcBWIGoYBM5M",
+            "name": "Today's Top Hits",
+            "tracks": {
+                "total": 50
+            }
+        },
+        {
+            "id": "37i9dQZF1DWXJfnUiYjUKT",
+            "name": "Rock Classics",
+            "tracks": {
+                "total": 80
+            }
+        }
+    ],
+    "total": 2,
+    "limit": 20,
+    "offset": 0,
+    "href": "https://api.spotify.com/v1/me/playlists"
+}
+```
+
+  -   Error Resonse Example
+      -   Code: 401
+      -   Content:
+  -   Example Request: No request body needed. The access token is retrieved from the session.
+  -   Example Response:
+      -   A successful response with the user's playlist data:
+```
+{
+    "items": [
+        {
+            "id": "4s1v19zF9Z4NpYGEtikN1t",
+            "name": "My Favorite Songs",
+            "tracks": {
+                "total": 24
+            }
+        }
+    ],
+    "total": 1,
+    "limit": 20,
+    "offset": 0,
+    "href": "https://api.spotify.com/v1/me/playlists"
+}
+```
+  -   Or an error response if the access token is missing:
+```
 HTTP/1.1 302 Found
 Location: /login
 ```
