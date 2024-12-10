@@ -1,5 +1,5 @@
 from dotenv import load_dotenv
-from flask import Flask, jsonify, make_response, Response, request
+from flask import Flask, jsonify, make_response, Response, request, session
 from werkzeug.exceptions import BadRequest, Unauthorized
 # from flask_cors import CORS
 
@@ -7,9 +7,11 @@ from config import ProductionConfig
 from meal_max.db import db
 from meal_max.models.battle_model import BattleModel
 from meal_max.models.kitchen_model import Meals
-from meal_max.models.mongo_session_model import login_user, logout_user
+#from meal_max.models.mongo_session_model import login_user, logout_user
 from meal_max.models.user_model import Users
-from global import BASE_URL, REDIRECT_URI, SPOTIFY_AUTH_URL, SPOTIFY_TOKEN_URL
+from meal_max.models.personal_model import PersonalModel
+#from global import BASE_URL, REDIRECT_URI, SPOTIFY_AUTH_URL, SPOTIFY_TOKEN_URL
+import requests
 
 # Load environment variables from .env file
 load_dotenv()
@@ -134,9 +136,9 @@ def create_app(config_class=ProductionConfig):
         'response_type': 'code',
         'redirect_uri': REDIRECT_URI,
         'scope': 'user-read-private user-read-email',
-    }
-    url = f"{SPOTIFY_AUTH_URL}/?{urlencode(auth_query_params)}"
-    return redirect(url)
+        }
+        url = f"{SPOTIFY_AUTH_URL}/?{urlencode(auth_query_params)}"
+        return redirect(url)
 
     @app.route('/callback', methods=['POST'])
     def callback():
@@ -161,7 +163,7 @@ def create_app(config_class=ProductionConfig):
         return redirect('/user-profile')
 
     @app.route('/user-profile', methods=['POST'])
-        def user_profile():
+    def user_profile():
         """
         Fetches and displays the authenticated user's Spotify profile.
 
@@ -172,7 +174,7 @@ def create_app(config_class=ProductionConfig):
         """
         access_token = session.get('access_token')
         if not access_token:
-        return redirect('/login')
+            return redirect('/login')
     
         headers = {'Authorization': f'Bearer {access_token}'}
         response = requests.get(f"{BASE_URL}/me", headers=headers)
@@ -180,7 +182,7 @@ def create_app(config_class=ProductionConfig):
 
     
     @app.route('/playlists', methods=['POST'])
-        def playlists():
+    def playlists():
         """
         Fetches and displays the authenticated user's playlists.
 
@@ -243,6 +245,168 @@ def create_app(config_class=ProductionConfig):
     # Meals
     #
     ##########################################################
+        
+    @app.route('/api/top-items', methods=['POST'])
+    def get_top_items() -> Response:
+        """
+        Route to fetch the user's top items (either artists or tracks) from Spotify.
+
+        Expected JSON Input:
+            - type (str): The type of items to retrieve (artists or tracks).
+            - time_range (str, optional): The time range for the data.
+            - limit (int, optional): The number of items to return (default 20).
+            - offset (int, optional): The index of the first item to return (default 0).
+
+        Returns:
+            JSON response containing the user's top items.
+
+        Raises:
+            400 error if input validation fails.
+            500 error if there is an issue with the Spotify API request.
+        """
+        app.logger.info('Fetching user top items')
+        try:
+            # Get the JSON data from the request
+            data = request.get_json()
+
+            # Extract and validate required fields
+            item_type = data.get('type')
+            time_range = data.get('time_range', 'medium_term')
+            limit = data.get('limit', 20)
+            offset = data.get('offset', 0)
+
+            if item_type not in ['artists', 'tracks']:
+                raise BadRequest("Invalid type. Must be 'artists' or 'tracks'.")
+
+            # Validate time_range and other optional fields
+            if time_range not in ['long_term', 'medium_term', 'short_term']:
+                raise BadRequest("Invalid time_range. Must be 'long_term', 'medium_term', or 'short_term'.")
+        
+            if not isinstance(limit, int) or limit <1 or limit >50:
+                raise BadRequest("Limit must be an integer between 1 and 50.")
+        
+            if not isinstance(offset, int) or offset <0:
+                raise BadRequest("Offset must be a non-negative integer.")
+
+            # Check for a valid access token
+            access_token = session.get('access_token')
+            if not access_token:
+                raise Unauthorized("User is not logged in or session has expired.")
+            
+            personal_model = PersonalModel(access_token)
+
+            top_items = personal_model.get_top_items(
+            type=item_type,
+            time_range=time_range,
+            limit=limit,
+            offset=offset
+            )
+
+            app.logger.info("Fetched top items successfully.")
+            return make_response(jsonify(top_items), 200)
+
+        except ValueError as ve:
+            app.logger.error("Invalid input: %s", str(ve))
+            return make_response(jsonify({'error': str(ve)}), 400)
+
+        except RuntimeError as re:
+            app.logger.error("Failed to fetch top items: %s", str(re))
+            return make_response(jsonify({'error': str(re)}), 500)
+
+        except Exception as e:
+            app.logger.error("Unexpected error occurred: %s", str(e))
+            return make_response(jsonify({'error': 'An unexpected error occurred.'}), 500)
+
+    @app.route('/api/followed-artists', methods=['POST'])
+    def get_followed_artists() -> Response:
+        """
+        Route to fetch followed artists using the Personal_Model function.
+
+        Expected JSON Input:
+            - data (str): The type of items to retrieve (artists is only option).
+            - limit (int, optional): The number of items to return (default 20).
+            - after (str, optional): The last retrieved artist ID.
+
+        Returns:
+            JSON response containing the user's followed artists.
+
+        Raises:
+            400 error if input validation fails.
+            500 error if there is an issue with the Spotify API request.
+        """
+        try:
+            # Fetch input from request
+            data = request.get_json()
+            limit = data.get('limit', 20)
+            after = data.get('after')
+
+            # Get access token from session
+            access_token = session.get('access_token')
+            if not access_token:
+                raise Unauthorized("User is not logged in or session has expired.")
+            
+            personal_model = PersonalModel(access_token)
+
+            # Call the model function
+            followed_artists = personal_model.get_followed_artists(access_token, limit, after)
+            return make_response(jsonify(followed_artists), 200)
+
+        except ValueError as e:
+            return make_response(jsonify({'error': str(e)}), 400)
+        except requests.RequestException as e:
+            return make_response(jsonify({'error': str(e)}), 500)
+        
+    @app.route('/api/saved-albums', methods=['GET'])
+    def get_saved_albums():
+        """
+        API route to fetch the user's saved albums from Spotify.
+
+        Query Parameters:
+            - limit (int, optional): Number of items to return (default is 20, min 1, max 50).
+            - offset (int, optional): The index of the first item to return (default is 0).
+            - market (str, optional): Country code to filter content by market.
+
+        Returns:
+            JSON response containing the saved albums.
+
+        Raises:
+            400 error if input validation fails.
+            500 error if there is an issue with the Spotify API request.
+        """
+        app.logger.info("Fetching user's saved albums")
+
+        try:
+            # Extract query parameters
+            limit = int(request.args.get('limit', 20))
+            offset = int(request.args.get('offset', 0))
+            market = request.args.get('market')
+
+            # Check for a valid access token in the session
+            access_token = session.get('access_token')
+            if not access_token:
+                app.logger.error("User is not logged in or session has expired.")
+                return make_response(jsonify({'error': 'User is not logged in or session has expired.'}), 401)
+
+            # Initialize the personal model instance
+            personal_model = PersonalModel(access_token)
+
+            # Call the model function to fetch saved albums
+            saved_albums = personal_model.get_saved_albums(limit=limit, offset=offset, market=market)
+
+            app.logger.info("Fetched saved albums successfully.")
+            return make_response(jsonify(saved_albums), 200)
+
+        except ValueError as ve:
+            app.logger.error("Invalid input: %s", str(ve))
+            return make_response(jsonify({'error': str(ve)}), 400)
+
+        except RuntimeError as re:
+            app.logger.error("Failed to fetch saved albums: %s", str(re))
+            return make_response(jsonify({'error': str(re)}), 500)
+
+        except Exception as e:
+            app.logger.error("Unexpected error occurred: %s", str(e))
+            return make_response(jsonify({'error': 'An unexpected error occurred.'}), 500)
 
 
     @app.route('/api/create-meal', methods=['POST'])
