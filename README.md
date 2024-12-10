@@ -1,6 +1,9 @@
 # CS411-Final-Project
 
-Routes:
+## Overview:
+### This project makes calls to the Spotify API and manages the personal statistic of users such as their top items, followed artists, and saved albums.
+
+## Routes:
 
 Route: /login
 - Request Type: POST
