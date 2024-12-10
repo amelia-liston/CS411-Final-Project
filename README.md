@@ -28,4 +28,51 @@ Route: `/callback`
       - Content: Redirects to `/user-profile`.
   -   Example Request: This route does not require a direct request body. It relies on a query parameter provided by Spotify during the redirect.
   -   Example Response: A redirect response to `/user-profile`
- 
+
+ Route: `/user-profile`
+- Request Type: POST
+- Purpose: Fetches and displays the authenticated user's Spotify profile by making a GET request to Spotify's `/me` endpoint using the stored access token.
+- Request Body:
+  - No request body is required for this endpoint.
+- Response Format: JSON response containing the user's Spotify profile data.
+  -   Success Response Example:
+      - Code: 200
+      - Content: 
+```
+{
+    "display_name": "John Doe",
+    "id": "johndoe123",
+    "email": "johndoe@example.com",
+    "country": "US",
+    "product": "premium"
+}
+```
+  -   Error Response Example:
+      -   Code: 401
+      -   Content:
+```
+{
+    "error": {
+        "status": 401,
+        "message": "Invalid access token"
+    }
+}
+```
+  -   Example Request: No request body needed. The access token is retrieved from the session.
+  -   Example Response:
+      -   A successful response with the user's Spotify profile data:
+
+```
+{
+    "display_name": "Jane Doe",
+    "id": "janedoe",
+    "email": "janedoe@example.com",
+    "country": "US",
+    "product": "free"
+}
+```
+  - Or an error response if the access token is missing:
+ ```
+HTTP/1.1 302 Found
+Location: /login
+```
