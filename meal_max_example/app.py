@@ -10,7 +10,7 @@ from meal_max.models.kitchen_model import Meals
 #from meal_max.models.mongo_session_model import login_user, logout_user
 from meal_max.models.user_model import Users
 from meal_max.models.personal_model import PersonalModel
-#from global import BASE_URL, REDIRECT_URI, SPOTIFY_AUTH_URL, SPOTIFY_TOKEN_URL
+from global_urls import BASE_URL, REDIRECT_URI, SPOTIFY_AUTH_URL, SPOTIFY_TOKEN_URL
 import requests
 
 # Load environment variables from .env file
