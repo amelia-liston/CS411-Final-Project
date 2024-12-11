@@ -1,7 +1,7 @@
 # CS411-Final-Project
 
 ## Overview:
-### This project makes calls to the Spotify API and manages the personal statistic of users such as their top items, followed artists, and saved albums.
+### This project makes calls to the Spotify API and manages the personal statistics of users such as their top items, followed artists, and saved albums.
 
 ## Routes:
 
