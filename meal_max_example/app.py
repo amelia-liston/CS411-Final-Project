@@ -197,7 +197,7 @@ def create_app(config_class=ProductionConfig):
             return redirect('/login')
 
         headers = {'Authorization': f'Bearer {access_token}'}
-        response = requests.get(f"{SPOTIFY_API_BASE_URL}/me/playlists", headers=headers)
+        response = requests.get(f"{PersonalModel.BASE_URL}/me/playlists", headers=headers)
         return jsonify(response.json())
 
 
