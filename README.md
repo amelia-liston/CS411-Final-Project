@@ -228,7 +228,12 @@ Location: /login
   }
 }
 ```
-  -   Example Request: No request body needed. The access token is retrieved from the session.
+  -   Example Request:
+```
+curl --request GET \
+  --url https://api.spotify.com/v1/me/top/artists \
+  --header 'Authorization: Bearer 1POdFZRZbvb...qqillRxMr2z'
+```
   -   Example Response:
       -   A successful response with the user's top items:
 ```
@@ -368,7 +373,12 @@ Location: /login
   }
 }
 ```
-  -   Example Request: No request body needed. The access token is retrieved from the session.
+  -   Example Request:
+```
+curl --request GET \
+  --url 'https://api.spotify.com/v1/me/following?type=artist' \
+  --header 'Authorization: Bearer 1POdFZRZbvb...qqillRxMr2z'
+```
   -   Example Response:
       -   A successful response with the user's followed artists:
 ```
@@ -693,7 +703,12 @@ Location: /login
   }
 }
 ```
-  -   Example Request: No request body needed. The access token is retrieved from the session.
+  -   Example Request:
+```
+  curl --request GET \
+  --url 'https://api.spotify.com/v1/me/albums?limit=1&offset=0&market=ES' \
+  --header 'Authorization: Bearer 1POdFZRZbvb...qqillRxMr2z'
+```
   -   Example Response:
       -   A successful response with the user's saved albums:
 ```
