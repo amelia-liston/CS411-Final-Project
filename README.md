@@ -139,3 +139,36 @@ Location: /login
 HTTP/1.1 302 Found
 Location: /login
 ```
+
+### Route: `/top-items`
+- Request Type: POST
+- Purpose: Fetches the authenticated user's top items (either artists or tracks) from Spotify based on the specified time range, limit, and offset.
+- Request Body:
+  - Expected JSON Input:
+      - 
+- Response Format: 
+  -   Success Response Example:
+      - Code: 
+      - Content: 
+```
+{
+    
+}
+```
+
+  -   Error Resonse Example
+      -   Code: 
+      -   Content:
+  -   Example Request: 
+  -   Example Response:
+      -   
+```
+{
+    code here
+}
+```
+  -   Or an error response:
+```
+code ehre
+```
+
