@@ -5,8 +5,6 @@ from werkzeug.exceptions import BadRequest, Unauthorized
 
 from config import ProductionConfig
 from meal_max.db import db
-from meal_max.models.battle_model import BattleModel
-from meal_max.models.kitchen_model import Meals
 #from meal_max.models.mongo_session_model import login_user, logout_user
 from meal_max.models.user_model import Users
 from meal_max.models.personal_model import PersonalModel
@@ -25,7 +23,8 @@ def create_app(config_class=ProductionConfig):
     with app.app_context():
         db.create_all()  # Recreate all tables
 
-    battle_model = BattleModel()
+    access_token = SPOTIFY_TOKEN_URL
+    personal_model = PersonalModel(access_token)
 
     ####################################################
     #
@@ -124,7 +123,7 @@ def create_app(config_class=ProductionConfig):
     #         return make_response(jsonify({'error': str(e)}), 500)
 
 
-    @app.route('api/login', methods=['POST'])
+    @app.route('/api/login', methods=['POST'])
     def login():
         """
         Route to login a user by redirecting the user to Spotify's authentication page..
@@ -560,96 +559,96 @@ def create_app(config_class=ProductionConfig):
     ############################################################
 
 
-    @app.route('/api/battle', methods=['GET'])
-    def battle() -> Response:
-        """
-        Route to initiate a battle between the two currently prepared meals.
+    # @app.route('/api/battle', methods=['GET'])
+    # def battle() -> Response:
+    #     """
+    #     Route to initiate a battle between the two currently prepared meals.
 
-        Returns:
-            JSON response indicating the result of the battle and the winner.
-        Raises:
-            500 error if there is an issue during the battle.
-        """
-        try:
-            app.logger.info('Two meals enter, one meal leaves!')
+    #     Returns:
+    #         JSON response indicating the result of the battle and the winner.
+    #     Raises:
+    #         500 error if there is an issue during the battle.
+    #     """
+    #     try:
+    #         app.logger.info('Two meals enter, one meal leaves!')
 
-            winner = battle_model.battle()
+    #         winner = battle_model.battle()
 
-            return make_response(jsonify({'status': 'battle complete', 'winner': winner}), 200)
-        except Exception as e:
-            app.logger.error(f"Battle error: {e}")
-            return make_response(jsonify({'error': str(e)}), 500)
+    #         return make_response(jsonify({'status': 'battle complete', 'winner': winner}), 200)
+    #     except Exception as e:
+    #         app.logger.error(f"Battle error: {e}")
+    #         return make_response(jsonify({'error': str(e)}), 500)
 
-    @app.route('/api/clear-combatants', methods=['POST'])
-    def clear_combatants() -> Response:
-        """
-        Route to clear the list of combatants for the battle.
+    # @app.route('/api/clear-combatants', methods=['POST'])
+    # def clear_combatants() -> Response:
+    #     """
+    #     Route to clear the list of combatants for the battle.
 
-        Returns:
-            JSON response indicating success of the operation.
-        Raises:
-            500 error if there is an issue clearing combatants.
-        """
-        try:
-            app.logger.info('Clearing all combatants...')
-            battle_model.clear_combatants()
-            app.logger.info('Combatants cleared.')
-            return make_response(jsonify({'status': 'combatants cleared'}), 200)
-        except Exception as e:
-            app.logger.error("Failed to clear combatants: %s", str(e))
-            return make_response(jsonify({'error': str(e)}), 500)
+    #     Returns:
+    #         JSON response indicating success of the operation.
+    #     Raises:
+    #         500 error if there is an issue clearing combatants.
+    #     """
+    #     try:
+    #         app.logger.info('Clearing all combatants...')
+    #         battle_model.clear_combatants()
+    #         app.logger.info('Combatants cleared.')
+    #         return make_response(jsonify({'status': 'combatants cleared'}), 200)
+    #     except Exception as e:
+    #         app.logger.error("Failed to clear combatants: %s", str(e))
+    #         return make_response(jsonify({'error': str(e)}), 500)
 
-    @app.route('/api/get-combatants', methods=['GET'])
-    def get_combatants() -> Response:
-        """
-        Route to get the list of combatants for the battle.
+    # @app.route('/api/get-combatants', methods=['GET'])
+    # def get_combatants() -> Response:
+    #     """
+    #     Route to get the list of combatants for the battle.
 
-        Returns:
-            JSON response with the list of combatants.
-        """
-        try:
-            app.logger.info('Getting combatants...')
-            combatants = battle_model.get_combatants()
-            return make_response(jsonify({'status': 'success', 'combatants': combatants}), 200)
-        except Exception as e:
-            app.logger.error("Failed to get combatants: %s", str(e))
-            return make_response(jsonify({'error': str(e)}), 500)
+    #     Returns:
+    #         JSON response with the list of combatants.
+    #     """
+    #     try:
+    #         app.logger.info('Getting combatants...')
+    #         combatants = battle_model.get_combatants()
+    #         return make_response(jsonify({'status': 'success', 'combatants': combatants}), 200)
+    #     except Exception as e:
+    #         app.logger.error("Failed to get combatants: %s", str(e))
+    #         return make_response(jsonify({'error': str(e)}), 500)
 
-    @app.route('/api/prep-combatant', methods=['POST'])
-    def prep_combatant() -> Response:
-        """
-        Route to prepare a prep a meal making it a combatant for a battle.
+    # @app.route('/api/prep-combatant', methods=['POST'])
+    # def prep_combatant() -> Response:
+    #     """
+    #     Route to prepare a prep a meal making it a combatant for a battle.
 
-        Parameters:
-            - meal (str): The name of the meal
+    #     Parameters:
+    #         - meal (str): The name of the meal
 
-        Returns:
-            JSON response indicating the success of combatant preparation.
-        Raises:
-            500 error if there is an issue preparing combatants.
-        """
-        try:
-            data = request.json
-            if not data or 'meal' not in data:
-                return make_response(jsonify({'error': 'Meal name is required'}), 400)
-            meal = data.get('meal')
-            app.logger.info("Preparing combatant: %s", meal)
+    #     Returns:
+    #         JSON response indicating the success of combatant preparation.
+    #     Raises:
+    #         500 error if there is an issue preparing combatants.
+    #     """
+    #     try:
+    #         data = request.json
+    #         if not data or 'meal' not in data:
+    #             return make_response(jsonify({'error': 'Meal name is required'}), 400)
+    #         meal = data.get('meal')
+    #         app.logger.info("Preparing combatant: %s", meal)
 
-            if not meal:
-                raise BadRequest('You must name a combatant')
+    #         if not meal:
+    #             raise BadRequest('You must name a combatant')
 
-            try:
-                meal = Meals.get_meal_by_name(meal)
-                battle_model.prep_combatant(meal)
-                combatants = battle_model.get_combatants()
-            except Exception as e:
-                app.logger.error("Failed to prepare combatant: %s", str(e))
-                return make_response(jsonify({'error': str(e)}), 500)
-            return make_response(jsonify({'status': 'combatant prepared', 'combatants': combatants}), 200)
+    #         try:
+    #             meal = Meals.get_meal_by_name(meal)
+    #             battle_model.prep_combatant(meal)
+    #             combatants = battle_model.get_combatants()
+    #         except Exception as e:
+    #             app.logger.error("Failed to prepare combatant: %s", str(e))
+    #             return make_response(jsonify({'error': str(e)}), 500)
+    #         return make_response(jsonify({'status': 'combatant prepared', 'combatants': combatants}), 200)
 
-        except Exception as e:
-            app.logger.error("Failed to prepare combatants: %s", str(e))
-            return make_response(jsonify({'error': str(e)}), 500)
+    #     except Exception as e:
+    #         app.logger.error("Failed to prepare combatants: %s", str(e))
+    #         return make_response(jsonify({'error': str(e)}), 500)
 
 
     ############################################################
@@ -659,31 +658,31 @@ def create_app(config_class=ProductionConfig):
     ############################################################
 
 
-    @app.route('/api/leaderboard', methods=['GET'])
-    def get_leaderboard() -> Response:
-        """
-        Route to get the leaderboard of meals sorted by wins, battles, or win percentage.
+    # @app.route('/api/leaderboard', methods=['GET'])
+    # def get_leaderboard() -> Response:
+    #     """
+    #     Route to get the leaderboard of meals sorted by wins, battles, or win percentage.
 
-        Query Parameters:
-            - sort (str): The field to sort by ('wins', 'battles', or 'win_pct'). Default is 'wins'.
+    #     Query Parameters:
+    #         - sort (str): The field to sort by ('wins', 'battles', or 'win_pct'). Default is 'wins'.
 
-        Returns:
-            JSON response with a sorted leaderboard of meals.
-        Raises:
-            500 error if there is an issue generating the leaderboard.
-        """
-        try:
-            sort_by = request.args.get('sort', 'wins')  # Default sort by wins
-            app.logger.info("Generating leaderboard sorted by %s", sort_by)
+    #     Returns:
+    #         JSON response with a sorted leaderboard of meals.
+    #     Raises:
+    #         500 error if there is an issue generating the leaderboard.
+    #     """
+    #     try:
+    #         sort_by = request.args.get('sort', 'wins')  # Default sort by wins
+    #         app.logger.info("Generating leaderboard sorted by %s", sort_by)
 
-            leaderboard_data = Meals.get_leaderboard(sort_by)
+    #         leaderboard_data = Meals.get_leaderboard(sort_by)
 
-            return make_response(jsonify({'status': 'success', 'leaderboard': leaderboard_data}), 200)
-        except Exception as e:
-            app.logger.error(f"Error generating leaderboard: {e}")
-            return make_response(jsonify({'error': str(e)}), 500)
+    #         return make_response(jsonify({'status': 'success', 'leaderboard': leaderboard_data}), 200)
+    #     except Exception as e:
+    #         app.logger.error(f"Error generating leaderboard: {e}")
+    #         return make_response(jsonify({'error': str(e)}), 500)
 
-    return app
+    # return app
 
 
 if __name__ == '__main__':
