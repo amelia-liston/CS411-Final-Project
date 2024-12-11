@@ -139,3 +139,140 @@ Location: /login
 HTTP/1.1 302 Found
 Location: /login
 ```
+
+### Route: `/api/top-items`
+- Request Type: POST
+- Purpose: Fetches and displays the user's top artists or tracks by making a GET request to Spotify's `/me/top/{type}` endpoint using the stored access token and an input type of item.
+- Request Body:
+  - No request body is required for this endpoint.
+- Response Format: JSON response containing the user's list of items.
+  -   Success Response Example:
+      - Code: 200
+      - Content:
+```
+{
+  "href": "https://api.spotify.com/v1/me/top/artists?limit=1&locale=en-US,en;q%3D0.9,es;q%3D0.8",
+  "limit": 1,
+  "next": "https://api.spotify.com/v1/me/top/artists?offset=1&limit=1&locale=en-US,en;q%3D0.9,es;q%3D0.8",
+  "offset": 0,
+  "previous": null,
+  "total": 154,
+  "items": [
+    {
+      "external_urls": {
+        "spotify": "https://open.spotify.com/artist/0e86yPdC41PGRkLp2Q1Bph"
+      },
+      "followers": {
+        "href": null,
+        "total": 4253854
+      },
+      "genres": ["canadian indie rock", "pov: indie", "vancouver indie"],
+      "href": "https://api.spotify.com/v1/artists/0e86yPdC41PGRkLp2Q1Bph",
+      "id": "0e86yPdC41PGRkLp2Q1Bph",
+      "images": [
+        {
+          "url": "https://i.scdn.co/image/ab6761610000e5eb90f1016268dd7a972d740fd3",
+          "height": 640,
+          "width": 640
+        },
+        {
+          "url": "https://i.scdn.co/image/ab6761610000517490f1016268dd7a972d740fd3",
+          "height": 320,
+          "width": 320
+        },
+        {
+          "url": "https://i.scdn.co/image/ab6761610000f17890f1016268dd7a972d740fd3",
+          "height": 160,
+          "width": 160
+        }
+      ],
+      "name": "Mother Mother",
+      "popularity": 73,
+      "type": "artist",
+      "uri": "spotify:artist:0e86yPdC41PGRkLp2Q1Bph"
+    }
+  ]
+}
+```
+
+  -   Error Resonse Example
+      -   Code: 401
+      -   Content:
+```
+{
+  "error": {
+    "status": 400,
+    "message": "string"
+  }
+}
+```
+  -   Error Resonse Example
+      -   Code: 403
+      -   Content:
+```
+{
+  "error": {
+    "status": 400,
+    "message": "string"
+  }
+}
+```
+  -   Error Resonse Example
+      -   Code: 429
+      -   Content:
+```
+{
+  "error": {
+    "status": 400,
+    "message": "string"
+  }
+}
+```
+  -   Example Request: No request body needed. The access token is retrieved from the session.
+  -   Example Response:
+      -   A successful response with the user's top items:
+```
+{
+  "href": "https://api.spotify.com/v1/me/top/artists?limit=1&locale=en-US,en;q%3D0.9,es;q%3D0.8",
+  "limit": 1,
+  "next": "https://api.spotify.com/v1/me/top/artists?offset=1&limit=1&locale=en-US,en;q%3D0.9,es;q%3D0.8",
+  "offset": 0,
+  "previous": null,
+  "total": 154,
+  "items": [
+    {
+      "external_urls": {
+        "spotify": "https://open.spotify.com/artist/0e86yPdC41PGRkLp2Q1Bph"
+      },
+      "followers": {
+        "href": null,
+        "total": 4253854
+      },
+      "genres": ["canadian indie rock", "pov: indie", "vancouver indie"],
+      "href": "https://api.spotify.com/v1/artists/0e86yPdC41PGRkLp2Q1Bph",
+      "id": "0e86yPdC41PGRkLp2Q1Bph",
+      "images": [
+        {
+          "url": "https://i.scdn.co/image/ab6761610000e5eb90f1016268dd7a972d740fd3",
+          "height": 640,
+          "width": 640
+        },
+        {
+          "url": "https://i.scdn.co/image/ab6761610000517490f1016268dd7a972d740fd3",
+          "height": 320,
+          "width": 320
+        },
+        {
+          "url": "https://i.scdn.co/image/ab6761610000f17890f1016268dd7a972d740fd3",
+          "height": 160,
+          "width": 160
+        }
+      ],
+      "name": "Mother Mother",
+      "popularity": 73,
+      "type": "artist",
+      "uri": "spotify:artist:0e86yPdC41PGRkLp2Q1Bph"
+    }
+  ]
+}
+```
