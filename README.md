@@ -140,7 +140,7 @@ HTTP/1.1 302 Found
 Location: /login
 ```
 
-### Route: `/api/top-items`
+### Route: `/top-items`
 - Request Type: POST
 - Purpose: Fetches and displays the user's top artists or tracks by making a GET request to Spotify's `/me/top/{type}` endpoint using the stored access token and an input type of item.
 - Request Body:
