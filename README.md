@@ -276,3 +276,146 @@ Location: /login
   ]
 }
 ```
+
+### Route: `/following`
+- Request Type: POST
+- Purpose: Fetches and displays the user's followed artists by making a GET request to Spotify's `/me/following` endpoint using the stored access token.
+- Request Body:
+  - No request body is required for this endpoint.
+- Response Format: JSON response containing the user's followed artists.
+  -   Success Response Example:
+      - Code: 200
+      - Content:
+```
+{
+  "artists": {
+    "href": "https://api.spotify.com/v1/me/following?type=artist&limit=1&locale=en-US,en;q%3D0.9,es;q%3D0.8",
+    "limit": 1,
+    "next": "https://api.spotify.com/v1/me/following?type=artist&limit=1&after=3AFsnAC0H9hes71BeRypbq&locale=en-US,en;q%3D0.9,es;q%3D0.8",
+    "cursors": {
+      "after": "3AFsnAC0H9hes71BeRypbq"
+    },
+    "total": 6,
+    "items": [
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/3AFsnAC0H9hes71BeRypbq"
+        },
+        "followers": {
+          "href": null,
+          "total": 252056
+        },
+        "genres": ["pov: indie"],
+        "href": "https://api.spotify.com/v1/artists/3AFsnAC0H9hes71BeRypbq",
+        "id": "3AFsnAC0H9hes71BeRypbq",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab6761610000e5eb634aa69a50363eadd90d19fb",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616100005174634aa69a50363eadd90d19fb",
+            "height": 320,
+            "width": 320
+          },
+          {
+            "url": "https://i.scdn.co/image/ab6761610000f178634aa69a50363eadd90d19fb",
+            "height": 160,
+            "width": 160
+          }
+        ],
+        "name": "Fish in a Birdcage",
+        "popularity": 62,
+        "type": "artist",
+        "uri": "spotify:artist:3AFsnAC0H9hes71BeRypbq"
+      }
+    ]
+  }
+}
+```
+
+  -   Error Resonse Example
+      -   Code: 401
+      -   Content:
+```
+{
+  "error": {
+    "status": 400,
+    "message": "string"
+  }
+}
+```
+  -   Error Resonse Example
+      -   Code: 403
+      -   Content:
+```
+{
+  "error": {
+    "status": 400,
+    "message": "string"
+  }
+}
+```
+  -   Error Resonse Example
+      -   Code: 429
+      -   Content:
+```
+{
+  "error": {
+    "status": 400,
+    "message": "string"
+  }
+}
+```
+  -   Example Request: No request body needed. The access token is retrieved from the session.
+  -   Example Response:
+      -   A successful response with the user's followed artists:
+```
+{
+  "artists": {
+    "href": "https://api.spotify.com/v1/me/following?type=artist&limit=1&locale=en-US,en;q%3D0.9,es;q%3D0.8",
+    "limit": 1,
+    "next": "https://api.spotify.com/v1/me/following?type=artist&limit=1&after=3AFsnAC0H9hes71BeRypbq&locale=en-US,en;q%3D0.9,es;q%3D0.8",
+    "cursors": {
+      "after": "3AFsnAC0H9hes71BeRypbq"
+    },
+    "total": 6,
+    "items": [
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/3AFsnAC0H9hes71BeRypbq"
+        },
+        "followers": {
+          "href": null,
+          "total": 252056
+        },
+        "genres": ["pov: indie"],
+        "href": "https://api.spotify.com/v1/artists/3AFsnAC0H9hes71BeRypbq",
+        "id": "3AFsnAC0H9hes71BeRypbq",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab6761610000e5eb634aa69a50363eadd90d19fb",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616100005174634aa69a50363eadd90d19fb",
+            "height": 320,
+            "width": 320
+          },
+          {
+            "url": "https://i.scdn.co/image/ab6761610000f178634aa69a50363eadd90d19fb",
+            "height": 160,
+            "width": 160
+          }
+        ],
+        "name": "Fish in a Birdcage",
+        "popularity": 62,
+        "type": "artist",
+        "uri": "spotify:artist:3AFsnAC0H9hes71BeRypbq"
+      }
+    ]
+  }
+}
+```
