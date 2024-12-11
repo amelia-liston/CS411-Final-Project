@@ -1,5 +1,5 @@
 from dotenv import load_dotenv
-from flask import Flask, jsonify, make_response, Response, request, session
+from flask import Flask, jsonify, make_response, Response, request, session, redirect
 from werkzeug.exceptions import BadRequest, Unauthorized
 # from flask_cors import CORS
 
@@ -12,6 +12,7 @@ from meal_max.models.user_model import Users
 from meal_max.models.personal_model import PersonalModel
 from global_urls import BASE_URL, REDIRECT_URI, SPOTIFY_AUTH_URL, SPOTIFY_TOKEN_URL
 import requests
+from urllib.parse import urlencode
 
 # Load environment variables from .env file
 load_dotenv()
