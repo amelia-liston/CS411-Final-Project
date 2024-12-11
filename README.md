@@ -419,3 +419,510 @@ Location: /login
   }
 }
 ```
+
+### Route: `/saved-albums`
+- Request Type: GET
+- Purpose: Fetches the user's saved albums by making a GET request to Spotify's `/me/albums` endpoint using the stored access token.
+- Request Body:
+  - No request body is required for this endpoint.
+- Response Format: JSON response containing the user's followed artists.
+  -   Success Response Example:
+      - Code: 200
+      - Content:
+```
+{
+  "href": "https://api.spotify.com/v1/me/albums?offset=0&limit=1&market=ES&locale=en-US,en;q%3D0.9,es;q%3D0.8",
+  "items": [
+    {
+      "added_at": "2024-08-22T04:00:00Z",
+      "album": {
+        "album_type": "single",
+        "total_tracks": 5,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/7x88WJNlL9qYtxrVzT0ah0"
+        },
+        "href": "https://api.spotify.com/v1/albums/7x88WJNlL9qYtxrVzT0ah0?market=ES&locale=en-US%2Cen%3Bq%3D0.9%2Ces%3Bq%3D0.8",
+        "id": "7x88WJNlL9qYtxrVzT0ah0",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab67616d0000b273361eb9419c0f3f6d09491200",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616d00001e02361eb9419c0f3f6d09491200",
+            "height": 300,
+            "width": 300
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616d00004851361eb9419c0f3f6d09491200",
+            "height": 64,
+            "width": 64
+          }
+        ],
+        "name": "Ponyboy 2",
+        "release_date": "2024-08-22",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:7x88WJNlL9qYtxrVzT0ah0",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/7p24SkpCc94fUK8rPK3JHm"
+            },
+            "href": "https://api.spotify.com/v1/artists/7p24SkpCc94fUK8rPK3JHm",
+            "id": "7p24SkpCc94fUK8rPK3JHm",
+            "name": "Black Pontiac",
+            "type": "artist",
+            "uri": "spotify:artist:7p24SkpCc94fUK8rPK3JHm"
+          }
+        ],
+        "tracks": {
+          "href": "https://api.spotify.com/v1/albums/7x88WJNlL9qYtxrVzT0ah0/tracks?offset=0&limit=50&market=ES&locale=en-US,en;q%3D0.9,es;q%3D0.8",
+          "limit": 50,
+          "next": null,
+          "offset": 0,
+          "previous": null,
+          "total": 5,
+          "items": [
+            {
+              "artists": [
+                {
+                  "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/7p24SkpCc94fUK8rPK3JHm"
+                  },
+                  "href": "https://api.spotify.com/v1/artists/7p24SkpCc94fUK8rPK3JHm",
+                  "id": "7p24SkpCc94fUK8rPK3JHm",
+                  "name": "Black Pontiac",
+                  "type": "artist",
+                  "uri": "spotify:artist:7p24SkpCc94fUK8rPK3JHm"
+                }
+              ],
+              "disc_number": 1,
+              "duration_ms": 218973,
+              "explicit": false,
+              "external_urls": {
+                "spotify": "https://open.spotify.com/track/1rveyk8hejlsYZ4q6Vgkkj"
+              },
+              "href": "https://api.spotify.com/v1/tracks/1rveyk8hejlsYZ4q6Vgkkj",
+              "id": "1rveyk8hejlsYZ4q6Vgkkj",
+              "is_playable": true,
+              "name": "Blue Blood Baby",
+              "preview_url": null,
+              "track_number": 1,
+              "type": "track",
+              "uri": "spotify:track:1rveyk8hejlsYZ4q6Vgkkj",
+              "is_local": false
+            },
+            {
+              "artists": [
+                {
+                  "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/7p24SkpCc94fUK8rPK3JHm"
+                  },
+                  "href": "https://api.spotify.com/v1/artists/7p24SkpCc94fUK8rPK3JHm",
+                  "id": "7p24SkpCc94fUK8rPK3JHm",
+                  "name": "Black Pontiac",
+                  "type": "artist",
+                  "uri": "spotify:artist:7p24SkpCc94fUK8rPK3JHm"
+                }
+              ],
+              "disc_number": 1,
+              "duration_ms": 198981,
+              "explicit": false,
+              "external_urls": {
+                "spotify": "https://open.spotify.com/track/6NL4r7kh20KcmXsaGlREWU"
+              },
+              "href": "https://api.spotify.com/v1/tracks/6NL4r7kh20KcmXsaGlREWU",
+              "id": "6NL4r7kh20KcmXsaGlREWU",
+              "is_playable": true,
+              "name": "Call Me Lover",
+              "preview_url": null,
+              "track_number": 2,
+              "type": "track",
+              "uri": "spotify:track:6NL4r7kh20KcmXsaGlREWU",
+              "is_local": false
+            },
+            {
+              "artists": [
+                {
+                  "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/7p24SkpCc94fUK8rPK3JHm"
+                  },
+                  "href": "https://api.spotify.com/v1/artists/7p24SkpCc94fUK8rPK3JHm",
+                  "id": "7p24SkpCc94fUK8rPK3JHm",
+                  "name": "Black Pontiac",
+                  "type": "artist",
+                  "uri": "spotify:artist:7p24SkpCc94fUK8rPK3JHm"
+                }
+              ],
+              "disc_number": 1,
+              "duration_ms": 140505,
+              "explicit": true,
+              "external_urls": {
+                "spotify": "https://open.spotify.com/track/3wiLKALlrb8UEnAK89Yib7"
+              },
+              "href": "https://api.spotify.com/v1/tracks/3wiLKALlrb8UEnAK89Yib7",
+              "id": "3wiLKALlrb8UEnAK89Yib7",
+              "is_playable": true,
+              "name": "Go Go Hollywood",
+              "preview_url": null,
+              "track_number": 3,
+              "type": "track",
+              "uri": "spotify:track:3wiLKALlrb8UEnAK89Yib7",
+              "is_local": false
+            },
+            {
+              "artists": [
+                {
+                  "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/7p24SkpCc94fUK8rPK3JHm"
+                  },
+                  "href": "https://api.spotify.com/v1/artists/7p24SkpCc94fUK8rPK3JHm",
+                  "id": "7p24SkpCc94fUK8rPK3JHm",
+                  "name": "Black Pontiac",
+                  "type": "artist",
+                  "uri": "spotify:artist:7p24SkpCc94fUK8rPK3JHm"
+                }
+              ],
+              "disc_number": 1,
+              "duration_ms": 203250,
+              "explicit": true,
+              "external_urls": {
+                "spotify": "https://open.spotify.com/track/7JvjAIVPWwbKk75J18Qavz"
+              },
+              "href": "https://api.spotify.com/v1/tracks/7JvjAIVPWwbKk75J18Qavz",
+              "id": "7JvjAIVPWwbKk75J18Qavz",
+              "is_playable": true,
+              "name": "I NEED PEACE BUT WAR IS FUN",
+              "preview_url": null,
+              "track_number": 4,
+              "type": "track",
+              "uri": "spotify:track:7JvjAIVPWwbKk75J18Qavz",
+              "is_local": false
+            },
+            {
+              "artists": [
+                {
+                  "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/7p24SkpCc94fUK8rPK3JHm"
+                  },
+                  "href": "https://api.spotify.com/v1/artists/7p24SkpCc94fUK8rPK3JHm",
+                  "id": "7p24SkpCc94fUK8rPK3JHm",
+                  "name": "Black Pontiac",
+                  "type": "artist",
+                  "uri": "spotify:artist:7p24SkpCc94fUK8rPK3JHm"
+                }
+              ],
+              "disc_number": 1,
+              "duration_ms": 259000,
+              "explicit": true,
+              "external_urls": {
+                "spotify": "https://open.spotify.com/track/1E9dHFIHeNiiUkGfYKfTiv"
+              },
+              "href": "https://api.spotify.com/v1/tracks/1E9dHFIHeNiiUkGfYKfTiv",
+              "id": "1E9dHFIHeNiiUkGfYKfTiv",
+              "is_playable": true,
+              "name": "Slow Dance at the Disco - JY Remix",
+              "preview_url": null,
+              "track_number": 5,
+              "type": "track",
+              "uri": "spotify:track:1E9dHFIHeNiiUkGfYKfTiv",
+              "is_local": false
+            }
+          ]
+        },
+        "copyrights": [
+          {
+            "text": "2024 Black Pontiac",
+            "type": "C"
+          },
+          {
+            "text": "2024 Black Pontiac",
+            "type": "P"
+          }
+        ],
+        "external_ids": {
+          "upc": "198667406751"
+        },
+        "genres": [],
+        "label": "Black Pontiac",
+        "popularity": 20
+      }
+    }
+  ],
+  "limit": 1,
+  "next": "https://api.spotify.com/v1/me/albums?offset=1&limit=1&market=ES&locale=en-US,en;q%3D0.9,es;q%3D0.8",
+  "offset": 0,
+  "previous": null,
+  "total": 6
+}
+```
+
+  -   Error Resonse Example
+      -   Code: 401
+      -   Content:
+```
+{
+  "error": {
+    "status": 400,
+    "message": "string"
+  }
+}
+```
+  -   Error Resonse Example
+      -   Code: 403
+      -   Content:
+```
+{
+  "error": {
+    "status": 400,
+    "message": "string"
+  }
+}
+```
+  -   Error Resonse Example
+      -   Code: 429
+      -   Content:
+```
+{
+  "error": {
+    "status": 400,
+    "message": "string"
+  }
+}
+```
+  -   Example Request: No request body needed. The access token is retrieved from the session.
+  -   Example Response:
+      -   A successful response with the user's saved albums:
+```
+{
+  "href": "https://api.spotify.com/v1/me/albums?offset=0&limit=1&market=ES&locale=en-US,en;q%3D0.9,es;q%3D0.8",
+  "items": [
+    {
+      "added_at": "2024-08-22T04:00:00Z",
+      "album": {
+        "album_type": "single",
+        "total_tracks": 5,
+        "is_playable": true,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/7x88WJNlL9qYtxrVzT0ah0"
+        },
+        "href": "https://api.spotify.com/v1/albums/7x88WJNlL9qYtxrVzT0ah0?market=ES&locale=en-US%2Cen%3Bq%3D0.9%2Ces%3Bq%3D0.8",
+        "id": "7x88WJNlL9qYtxrVzT0ah0",
+        "images": [
+          {
+            "url": "https://i.scdn.co/image/ab67616d0000b273361eb9419c0f3f6d09491200",
+            "height": 640,
+            "width": 640
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616d00001e02361eb9419c0f3f6d09491200",
+            "height": 300,
+            "width": 300
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616d00004851361eb9419c0f3f6d09491200",
+            "height": 64,
+            "width": 64
+          }
+        ],
+        "name": "Ponyboy 2",
+        "release_date": "2024-08-22",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:7x88WJNlL9qYtxrVzT0ah0",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/7p24SkpCc94fUK8rPK3JHm"
+            },
+            "href": "https://api.spotify.com/v1/artists/7p24SkpCc94fUK8rPK3JHm",
+            "id": "7p24SkpCc94fUK8rPK3JHm",
+            "name": "Black Pontiac",
+            "type": "artist",
+            "uri": "spotify:artist:7p24SkpCc94fUK8rPK3JHm"
+          }
+        ],
+        "tracks": {
+          "href": "https://api.spotify.com/v1/albums/7x88WJNlL9qYtxrVzT0ah0/tracks?offset=0&limit=50&market=ES&locale=en-US,en;q%3D0.9,es;q%3D0.8",
+          "limit": 50,
+          "next": null,
+          "offset": 0,
+          "previous": null,
+          "total": 5,
+          "items": [
+            {
+              "artists": [
+                {
+                  "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/7p24SkpCc94fUK8rPK3JHm"
+                  },
+                  "href": "https://api.spotify.com/v1/artists/7p24SkpCc94fUK8rPK3JHm",
+                  "id": "7p24SkpCc94fUK8rPK3JHm",
+                  "name": "Black Pontiac",
+                  "type": "artist",
+                  "uri": "spotify:artist:7p24SkpCc94fUK8rPK3JHm"
+                }
+              ],
+              "disc_number": 1,
+              "duration_ms": 218973,
+              "explicit": false,
+              "external_urls": {
+                "spotify": "https://open.spotify.com/track/1rveyk8hejlsYZ4q6Vgkkj"
+              },
+              "href": "https://api.spotify.com/v1/tracks/1rveyk8hejlsYZ4q6Vgkkj",
+              "id": "1rveyk8hejlsYZ4q6Vgkkj",
+              "is_playable": true,
+              "name": "Blue Blood Baby",
+              "preview_url": null,
+              "track_number": 1,
+              "type": "track",
+              "uri": "spotify:track:1rveyk8hejlsYZ4q6Vgkkj",
+              "is_local": false
+            },
+            {
+              "artists": [
+                {
+                  "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/7p24SkpCc94fUK8rPK3JHm"
+                  },
+                  "href": "https://api.spotify.com/v1/artists/7p24SkpCc94fUK8rPK3JHm",
+                  "id": "7p24SkpCc94fUK8rPK3JHm",
+                  "name": "Black Pontiac",
+                  "type": "artist",
+                  "uri": "spotify:artist:7p24SkpCc94fUK8rPK3JHm"
+                }
+              ],
+              "disc_number": 1,
+              "duration_ms": 198981,
+              "explicit": false,
+              "external_urls": {
+                "spotify": "https://open.spotify.com/track/6NL4r7kh20KcmXsaGlREWU"
+              },
+              "href": "https://api.spotify.com/v1/tracks/6NL4r7kh20KcmXsaGlREWU",
+              "id": "6NL4r7kh20KcmXsaGlREWU",
+              "is_playable": true,
+              "name": "Call Me Lover",
+              "preview_url": null,
+              "track_number": 2,
+              "type": "track",
+              "uri": "spotify:track:6NL4r7kh20KcmXsaGlREWU",
+              "is_local": false
+            },
+            {
+              "artists": [
+                {
+                  "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/7p24SkpCc94fUK8rPK3JHm"
+                  },
+                  "href": "https://api.spotify.com/v1/artists/7p24SkpCc94fUK8rPK3JHm",
+                  "id": "7p24SkpCc94fUK8rPK3JHm",
+                  "name": "Black Pontiac",
+                  "type": "artist",
+                  "uri": "spotify:artist:7p24SkpCc94fUK8rPK3JHm"
+                }
+              ],
+              "disc_number": 1,
+              "duration_ms": 140505,
+              "explicit": true,
+              "external_urls": {
+                "spotify": "https://open.spotify.com/track/3wiLKALlrb8UEnAK89Yib7"
+              },
+              "href": "https://api.spotify.com/v1/tracks/3wiLKALlrb8UEnAK89Yib7",
+              "id": "3wiLKALlrb8UEnAK89Yib7",
+              "is_playable": true,
+              "name": "Go Go Hollywood",
+              "preview_url": null,
+              "track_number": 3,
+              "type": "track",
+              "uri": "spotify:track:3wiLKALlrb8UEnAK89Yib7",
+              "is_local": false
+            },
+            {
+              "artists": [
+                {
+                  "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/7p24SkpCc94fUK8rPK3JHm"
+                  },
+                  "href": "https://api.spotify.com/v1/artists/7p24SkpCc94fUK8rPK3JHm",
+                  "id": "7p24SkpCc94fUK8rPK3JHm",
+                  "name": "Black Pontiac",
+                  "type": "artist",
+                  "uri": "spotify:artist:7p24SkpCc94fUK8rPK3JHm"
+                }
+              ],
+              "disc_number": 1,
+              "duration_ms": 203250,
+              "explicit": true,
+              "external_urls": {
+                "spotify": "https://open.spotify.com/track/7JvjAIVPWwbKk75J18Qavz"
+              },
+              "href": "https://api.spotify.com/v1/tracks/7JvjAIVPWwbKk75J18Qavz",
+              "id": "7JvjAIVPWwbKk75J18Qavz",
+              "is_playable": true,
+              "name": "I NEED PEACE BUT WAR IS FUN",
+              "preview_url": null,
+              "track_number": 4,
+              "type": "track",
+              "uri": "spotify:track:7JvjAIVPWwbKk75J18Qavz",
+              "is_local": false
+            },
+            {
+              "artists": [
+                {
+                  "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/7p24SkpCc94fUK8rPK3JHm"
+                  },
+                  "href": "https://api.spotify.com/v1/artists/7p24SkpCc94fUK8rPK3JHm",
+                  "id": "7p24SkpCc94fUK8rPK3JHm",
+                  "name": "Black Pontiac",
+                  "type": "artist",
+                  "uri": "spotify:artist:7p24SkpCc94fUK8rPK3JHm"
+                }
+              ],
+              "disc_number": 1,
+              "duration_ms": 259000,
+              "explicit": true,
+              "external_urls": {
+                "spotify": "https://open.spotify.com/track/1E9dHFIHeNiiUkGfYKfTiv"
+              },
+              "href": "https://api.spotify.com/v1/tracks/1E9dHFIHeNiiUkGfYKfTiv",
+              "id": "1E9dHFIHeNiiUkGfYKfTiv",
+              "is_playable": true,
+              "name": "Slow Dance at the Disco - JY Remix",
+              "preview_url": null,
+              "track_number": 5,
+              "type": "track",
+              "uri": "spotify:track:1E9dHFIHeNiiUkGfYKfTiv",
+              "is_local": false
+            }
+          ]
+        },
+        "copyrights": [
+          {
+            "text": "2024 Black Pontiac",
+            "type": "C"
+          },
+          {
+            "text": "2024 Black Pontiac",
+            "type": "P"
+          }
+        ],
+        "external_ids": {
+          "upc": "198667406751"
+        },
+        "genres": [],
+        "label": "Black Pontiac",
+        "popularity": 20
+      }
+    }
+  ],
+  "limit": 1,
+  "next": "https://api.spotify.com/v1/me/albums?offset=1&limit=1&market=ES&locale=en-US,en;q%3D0.9,es;q%3D0.8",
+  "offset": 0,
+  "previous": null,
+  "total": 6
+}
+```
